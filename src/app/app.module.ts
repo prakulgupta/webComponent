@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
+import { NgModule, Injector } from '@angular/core';
 import { AppComponent } from './app.component';
+import { createCustomElement } from '@angular/elements';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -10,9 +10,17 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    CommonModule    
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [],
+  entryComponents:[AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(private injector: Injector) {
+  }
+  ngDoBootstrap() {
+      const appComponent = createCustomElement(AppComponent, { injector: this.injector });
+      customElements.define('app-main-dashboard', appComponent);
+  }
+}
